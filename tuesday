@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
 #tuesday
-`echo 'hello world'`
+today = `date`
+puts today
