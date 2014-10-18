@@ -1,2 +1,2 @@
 #install.rb
-stdoutput = `bundle install`
+`mv tuesday /usr/local/bin/tuesday`
