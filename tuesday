@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
 #tuesday
-today = `date`
-puts today
+#example of console output
+#today = `date`
+#puts today
+
+#to execute just use `$command` it will return a string variable
+
+output = `bundle install`
+puts output
