@@ -1,0 +1,12 @@
+1. Check if Unicorn is installed => str =  `gem list` [then look for unicorn]
+	a. Install Unicorn. `gem install unicorn`
+2. Set-up unicorn.rb `pwd`
+3. Make sure Nginx is installed => which nginx
+	a. Install Nginx => apt get install nginx
+	b. Get rid of the bad shit (of Nginx) => delete /etc/nginx/conf.d/defaults /etc/nginx/sites [sudo rm /path/to/directory/ *]
+	c. Add our shit to Nginx
+4. Update Nginx for new Unicorn
+5. Boot up Unicorns
+6. Restart Nginx
+7. Have a snack and take a nap
+
