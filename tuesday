@@ -10,4 +10,11 @@ output = `bundle install`
 puts output
 
 output = `gem list`
-puts output
+#puts output
+unicorn_output = output.match(/unicorn (.*)\n/)
+if unicorn_output.nil?
+  puts "I'm sorry...you appear to be missing Unicorn. Don't worry I got you ;)"
+  puts `gem install unicorn`
+else
+  puts "reservation made for mr. unicorn"
+end
