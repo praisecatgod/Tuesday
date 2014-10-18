@@ -1,3 +1,4 @@
+0. Bundle install
 1. Check if Unicorn is installed => str =  `gem list` [then look for unicorn]
 	a. Install Unicorn. `gem install unicorn`
 2. Set-up unicorn.rb `pwd`
