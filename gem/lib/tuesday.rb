@@ -5,13 +5,25 @@ class Tuesday
     puts "#praisecatgod"
     settings = {}
 
+    rails_app = false
+
     begin
       # Exceptions raised by this code will
       # be caught by the following rescue clause
       settings = eval "{#{IO.readlines('Menufile').join.strip}}"
-
     rescue
       puts "You don't have a Menufile. Please consult http://tuesdayrb.me for support.
+      Thank you please come again."
+      abort
+    end
+
+    begin
+      #check if file is a rails app
+      if File.read("config.ru").match("Rails")
+        rails_app = true
+      end
+    rescue
+      puts "You don't have a config.ru. Please consult http://tuesdayrb.me for support.
       Thank you please come again."
       abort
     end
@@ -52,7 +64,11 @@ class Tuesday
 
     "
     puts `rm unicorn.rb`
-    puts `echo "#{base_unicorn}" >> unicorn.rb`
+    if rails_app
+      puts `echo "#{base_unicorn}" >> config/unicorn.rb`
+    else
+      puts `echo "#{base_unicorn}" >> unicorn.rb`
+    end
 
     puts `mkdir logs pids`
 
@@ -106,11 +122,15 @@ class Tuesday
       kitchen.delete("#{app_name}".to_sym)
     end
 
-    kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip}
+    kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip, rails_app: "#{rails_app}"}
 
     puts "Making the patties"
     kitchen.each do |key,value|
-        puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
+        if value[:rails_app]
+          puts `unicorn_rails -c "#{value[:pwd]}"/config/unicorn.rb -D`
+        else
+          puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
+        end
         value[:pid] = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
         app_name = key
         domain_name = settings[:domain]
