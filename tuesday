@@ -133,7 +133,7 @@ new_nginx = ""
 puts "Grinding up the unicorns"
 kitchen.each do |key,value|
   str = "#{value[:pwd]}/pids/unicorn.pid"
-  #puts str
+  puts str
   unicorn_id = IO.readlines(str).join.strip
   puts `kill "#{unicorn_id}"`
 end
