@@ -28,6 +28,7 @@ class Tuesday
 
       File.write(kitchen_path, "")
       File.write("/etc/nginx/conf.d/default.conf","")
+      puts `service nginx restart`
     else
       #puts "#praisecatgod"
       settings = {}
