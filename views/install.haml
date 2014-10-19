@@ -1,0 +1,34 @@
+.container.home
+  .row
+    .col-md-12
+      %h1 Install Tuesday.rb
+  .row
+    .col-md-12
+      %h2 To install Tuesday.rb make sure you have RVM and Rubygems install
+  .row
+    .col-md-3
+    .col-md-6
+      .panel.panel-default
+        .panel-body
+          %code
+            $ rvm
+          %br
+            That returns a valid function call otherwise call
+          %br
+          %code
+            $ \curl -sSL https://get.rvm.io | bash -s stable
+          %br
+            Tuesday was was originally built with 2.1.2
+          %code
+            $ rvm install 2.1.2
+      %h3 Now install the Gem
+      .panel.panel-default
+        .panel-body
+          %code
+            $ gem install tuesday
+
+    .col-md-3
+  .row
+    .col-md-12
+      %h4 Awesome.
+      %p Now you are all set with tuesdays. Just navigate to any of your Rack based applications and type in $ tuesday 

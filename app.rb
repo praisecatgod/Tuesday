@@ -6,6 +6,9 @@ get '/' do
   haml :home
 end
 
+get '/install' do
+  haml :install
+end
 
 get '/docs' do
   haml :tutorial
