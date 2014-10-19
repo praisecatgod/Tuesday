@@ -4,7 +4,10 @@ class Tuesday
   def self.run
     puts ARGV[0]
 
-    if ARGV[0].downcase == "reset"
+    mode = ARGV[0]
+    mode = "regular" if ARGV[0].nil?
+
+    if mode.downcase == "reset"
       kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
       kitchen_str = ""
       File.foreach(kitchen_path){|line| kitchen_str += line}
