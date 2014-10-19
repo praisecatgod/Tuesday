@@ -119,6 +119,5 @@ server {
 puts nginx_base
 File.write("/etc/nginx/conf.d/default.conf",nginx_base)
 
-#puts `echo #{nginx_base} >> /etc/nginx/conf.d/default.conf `
-#puts `unicorn -c unicorn.rb -D`
-#puts `service nginx restart`
+puts `unicorn -c unicorn.rb -D`
+puts `service nginx restart`
