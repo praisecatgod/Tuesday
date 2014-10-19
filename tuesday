@@ -147,7 +147,7 @@ if kitchen["#{app_name}".to_sym]
   kitchen.delete("#{app_name}".to_sym)
 end
 
-kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}"}
+kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip}
 
 File.write('/usr/local/bin/kitchen', "#{kitchen}")
 
