@@ -78,12 +78,7 @@ class Tuesday
 
     kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
     File.foreach(kitchen_path){|line| puts line}
-    kitchen =  eval "#{IO.readlines('/usr/local/bin/kitchen').join.strip}"
-    puts "#{kitchen}"
-    puts "#{IO.readlines('/usr/local/bin/kitchen')}"
-    if kitchen.nil?
-      kitchen = {}
-    end
+
     puts "#{settings}"
     puts "Preparing the food"
 
