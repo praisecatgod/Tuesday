@@ -157,7 +157,7 @@ kitchen.each do |key,value|
 end
 
 File.write('/usr/local/bin/kitchen', "#{kitchen}")
-#File.write("/etc/nginx/conf.d/default.conf",new_nginx)
+File.write("/etc/nginx/conf.d/default.conf",new_nginx)
 
 #restart nginx
-#puts `service nginx restart`
+puts `service nginx restart`
