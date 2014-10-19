@@ -15,19 +15,25 @@ class Tuesday
       end
 
       kitchen.each do |key,value|
+	if value[:rails_app].downcase == "not"
+		puts "this is nodejs app"
+		puts `stop "#{value[:app_name]}"`
+	else
         if value[:rails_app].downcase == "true"
           puts `rm "#{value[:pwd]}"/config/unicorn.rb`
-        else
+	else
           puts `rm "#{value[:pwd]}"/unicorn.rb`
         end
         str = "#{value[:pwd]}/pids/unicorn.pid"
         puts str
         unicorn_id = IO.readlines(str).join.strip
         puts `kill "#{unicorn_id}"`
+        end
       end
 
       File.write(kitchen_path, "")
-      File.write("/etc/nginx/conf.d/default.conf","")
+      puts `rm /etc/nginx/conf.d/default.conf`
+	File.write("/etc/nginx/conf.d/default.conf","")
       puts `service nginx restart`
    elsif Dir["*.js"] != []
 	puts "This is a JS app"
@@ -53,30 +59,22 @@ class Tuesday
 	ary = ary.map{|p| "#{p}/"}
 	pwd = ary.join
 	
-	#build /etc/nginx/conf.d/defaults.conf
-	new_nginx = "
-upstream #{app_name} {
-    server 127.0.0.1:3000;
-  }
-
-server{
-listen 80;
-    server_name #{app_name}.#{settings[:domain]};
-    access_log #{pwd}#{app_name}/logs/nginx/minitorials.log;
-
-    location / {
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header Host $http_host;
-      proxy_set_header X-NginX-Proxy true;
-
-      proxy_pass http://#{app_name}/;
-      proxy_redirect off;
-    }
-}
-	"	
-	
+	#build /etc/nginx/conf.d/default.conf	
 	#build /etc/init/app_name.conf
+	#load kitchen
+	puts "Preparing the Kitchen"
+	kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
+      	kitchen_str = ""
+      	File.foreach(kitchen_path){|line| kitchen_str += line}
+      	kitchen = eval(kitchen_str.strip)
+      	puts "Preparing the food"
+      	if kitchen.nil?
+        	kitchen = {}
+      	end
+	kitchen["#{app_name}".to_sym] = {rails_app: "not", app_name: "#{app_name}", pwd: "#{pwd}"}
+	kitchen.each do |key, value|
+	app_name = value[:app_name]
+	pwd = value[:pwd]
 	daemon = "
 description \"node.js server named: #{app_name}\"
 author      \"Max Rogers - Tuesday.rb\"
@@ -102,15 +100,37 @@ post-start script
    # /root/bin/hoptoad.sh \"node.js has started!\"
 end script
 "
-	#load kitchen
-	puts "Preparing the Kitchen"
-	#rebuild nginx and add new app
-	open("/etc/nginx/conf.d/defaults.conf", "a"){ |f|
+#build /etc/nginx/conf.d/default.conf
+        new_nginx = "
+upstream #{app_name} {
+    server 127.0.0.1:3000;
+  }
+
+server{
+listen 80;
+    server_name #{app_name}.#{settings[:domain]};
+    access_log #{pwd}#{app_name}/logs/nginx/minitorials.log;
+
+    location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-NginX-Proxy true;
+
+      proxy_pass http://#{app_name}/;
+      proxy_redirect off;
+    }
+}
+        "	
+
+#rebuild nginx and add new app
+	open("/etc/nginx/conf.d/default.conf", "a"){ |f|
 		f.puts "#{new_nginx}"
 	}	
 	File.write("/etc/init/#{app_name}.conf", daemon)
 	#restart app_name and nginx 
 	puts `start "#{app_name}"`
+	end
 	puts `service nginx restart`
    else
       #puts "#praisecatgod"
@@ -240,6 +260,8 @@ end script
       kitchen.each do |key,value|
           if value[:rails_app].downcase == "true"
             puts `unicorn_rails -c "#{value[:pwd]}"/config/unicorn.rb -D`
+          elsif value[:rails_app].downcase == "not"
+		next
           else
             puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
           end
