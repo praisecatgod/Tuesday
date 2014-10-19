@@ -6,7 +6,7 @@
 
 #to execute just use `$command` it will return a string variable
 
-output = `bundle install`
+output = `bundle install --without production`
 puts output
 
 output = `gem list`
@@ -18,3 +18,83 @@ if unicorn_output.nil?
 else
   puts "reservation made for mr. unicorn"
 end
+output = `pwd`
+app_name = output.split("/").last
+app_name.strip!
+puts "I see you would like the #{app_name}. Very fine choice"
+
+base_unicorn = "
+working_directory '/var/www/#{app_name}'
+
+pid '/var/www/#{app_name}/pids/unicorn.pid'
+
+stderr_path '/var/www/#{app_name}/logs/unicorn.log'
+stdout_path '/var/www/#{app_name}/logs/unicorn.log'
+
+listen '/tmp/unicorn.#{app_name}.sock'
+
+# Number of processes
+# worker_processes 4
+worker_processes 1
+
+# Time-out
+timeout 30
+
+"
+puts `rm unicorn.rb`
+puts `echo "#{base_unicorn}" >> unicorn.rb`
+
+puts `mkdir logs pids`
+
+nginx = `which nginx`
+if nginx == ""
+  #install nginx
+  puts `brew install nginx`
+  #puts `apt-get install nginx`
+end
+
+#kill the bad nginx
+puts "Killing the bad nginx"
+puts `rm /etc/nginx/conf.d/defaults`
+puts `rm /etc/nginx/sites-available/*`
+puts `rm /etc/nginx/sites-enabled/*`
+
+puts "Added the good nginx"
+nginx_base = "
+
+upstream #{app_name} {
+    # Path to Unicorn SOCK file, as defined previously
+    server unix:/tmp/unicorn.#{app_name}.sock fail_timeout=0;
+}
+
+server {
+
+
+    listen 80;
+
+    # Set the server name, similar to Apache's settings
+    server_name localhost #{app_name}.#{domain_name};
+
+    # Application root, as defined previously
+    root /var/www/#{app_name}/public;
+
+    try_files $uri/index.html $uri @#{app_name};
+
+    location @#{app_name} {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://#{app_name};
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+
+}
+
+"
+
+puts `echo #{nginx_base} >> /etc/nginx/config.d/default.conf`
+puts `unicorn -c unicorn.rb -D`
+puts `service nginx restart`
