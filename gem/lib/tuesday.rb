@@ -157,6 +157,7 @@ class Tuesday
 
       puts "Making the patties"
       kitchen.each do |key,value|
+        puts "#{key} : #{value}"
           if value[:rails_app]
             puts `unicorn_rails -c "#{value[:pwd]}"/config/unicorn.rb -D`
           else
