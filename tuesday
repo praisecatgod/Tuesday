@@ -113,9 +113,11 @@ server {
 "
 
 #puts nginx_base
-conf_d =  IO.readlines('/etc/nginx/conf.d/default.conf').join
-puts conf_d
+#conf_d =  IO.readlines('/etc/nginx/conf.d/default.conf').join
+#puts conf_d
+`rm /etc/nginx/conf.d/default.conf`
 puts nginx_base
+File.write("/etc/nginx/conf.d/default.conf",nginx_base)
 
 #puts `echo #{nginx_base} >> /etc/nginx/conf.d/default.conf `
 #puts `unicorn -c unicorn.rb -D`
