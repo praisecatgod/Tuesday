@@ -84,7 +84,8 @@ class Tuesday
     if kitchen.nil?
       kitchen = {}
     end
-
+    puts "#{settings}"
+    puts "Preparing the food"
 
     #build new temp default.conf file
 
@@ -92,6 +93,8 @@ class Tuesday
     #puts "Reloading nginx config"
     #
     #write new default conf file
+
+    if false
 
     new_nginx = ""
 
@@ -163,6 +166,7 @@ class Tuesday
     #restart nginx
     puts `service nginx restart`
 
+    end
   end
 end
 
