@@ -3,6 +3,7 @@
 class Tuesday
   def self.run
     puts ARGV[0]
+    ARGV[0] = 'normal' if ARGV[0].nil?
 
     if ARGV[0].downcase == "reset"
       kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
@@ -153,8 +154,11 @@ class Tuesday
       kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip, rails_app: "#{rails_app}"}
 
       puts "Making the patties"
+      puts "#{kitchen}"
       kitchen.each do |key,value|
-          if value[:rails_app]
+	puts "#{key} : #{value}"
+          if value[:rails_app].downcase == "true"
+		puts "Nonsense"
             puts `unicorn_rails -c "#{value[:pwd]}"/config/unicorn.rb -D`
           else
             puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
