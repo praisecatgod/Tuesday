@@ -8,3 +8,6 @@
 
 output = `bundle install`
 puts output
+
+output = `gem list`
+puts output
