@@ -1,19 +1,20 @@
  #sidebar.affix-top {
-    position: static;
-    margin-top:30px;
-    width:228px;
-  }
-
-  #sidebar.affix {
-    position: fixed;
-    top:70px;
-    width:228px;
-  }
-
-body{
-  padding-top: 60px;
-}
-
-.home{
-  text-align: center
+   position: static;
+   margin-top: 30px;
+   width: 228px;
+ }
+ #sidebar.affix {
+   position: fixed;
+   top: 70px;
+   width: 228px;
+ }
+ body {
+   padding-top: 60px;
+ }
+ .home {
+   text-align: center
+ }
+ img.resize{
+    width:200px; /* you can use % */
+    height: auto;
 }
