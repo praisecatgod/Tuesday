@@ -75,6 +75,10 @@ class Tuesday
 
     #add app to kitchen
     puts "Stocking up the kitchen"
+
+    kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
+    file = File.open(kitchen_path)
+
     kitchen =  eval "#{IO.readlines('/usr/local/bin/kitchen').join.strip}"
     puts "#{kitchen}"
     puts "#{IO.readlines('/usr/local/bin/kitchen')}"
