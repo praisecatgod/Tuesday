@@ -112,10 +112,10 @@ server {
 
 "
 
-puts nginx_base
-puts IO.readlines('/etc/nginx/conf.d/default.conf').join
+#puts nginx_base
+#puts IO.readlines('/etc/nginx/conf.d/default.conf').join
 
 
-#puts `echo #{nginx_base} >> /etc/nginx/conf.d/default.conf
-#puts `unicorn -c unicorn.rb -D`
-#puts `service nginx restart`
+puts `echo #{nginx_base} >> /etc/nginx/conf.d/default.conf`
+puts `unicorn -c unicorn.rb -D`
+puts `service nginx restart`
