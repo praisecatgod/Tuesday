@@ -77,19 +77,11 @@ class Tuesday
     puts "Stocking up the kitchen"
 
     kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
-    File.foreach(kitchen_path){|line| puts line}
-
+    kitchen_str = ""
+    File.foreach(kitchen_path){|line| kitchen_str += line}
+    kitchen = eval(kitchen_str.strip)
     puts "#{settings}"
     puts "Preparing the food"
-    File.write(kitchen_path,"Stuff")
-    #build new temp default.conf file
-
-    #kill old default.conf
-    #puts "Reloading nginx config"
-    #
-    #write new default conf file
-
-    if false
 
     new_nginx = ""
 
@@ -155,13 +147,12 @@ class Tuesday
         "
     end
 
-    File.write('/usr/local/bin/kitchen', "#{kitchen}")
+    File.write(kitchen_path, "#{kitchen}")
     File.write("/etc/nginx/conf.d/default.conf",new_nginx)
 
     #restart nginx
     puts `service nginx restart`
 
-    end
   end
 end
 
