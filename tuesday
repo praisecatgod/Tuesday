@@ -49,8 +49,8 @@ puts `mkdir logs pids`
 nginx = `which nginx`
 if nginx == ""
   #install nginx
-  puts `brew install nginx`
-  #puts `apt-get install nginx`
+  #puts `brew install nginx`
+  puts `apt-get install nginx`
 end
 
 #kill the bad nginx
