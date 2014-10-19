@@ -90,7 +90,7 @@ server {
     listen 80;
 
     # Set the server name, similar to Apache's settings
-    server_name localhost #{app_name}.#{settings[:domain_name]};
+    server_name localhost #{app_name}.#{settings[:domain]};
 
     # Application root, as defined previously
     root /var/www/#{app_name}/public;
@@ -112,6 +112,10 @@ server {
 
 "
 
-puts `echo #{nginx_base} >> /etc/nginx/config.d/default.conf`
-puts `unicorn -c unicorn.rb -D`
-puts `service nginx restart`
+puts nginx_base
+puts IO.readlines('/etc/nginx/config.d/default.conf').join
+
+
+#puts `echo #{nginx_base} >> /etc/nginx/config.d/default.conf`
+#puts `unicorn -c unicorn.rb -D`
+#puts `service nginx restart`
