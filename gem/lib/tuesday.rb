@@ -15,7 +15,7 @@ class Tuesday
       end
 
       kitchen.each do |key,value|
-        if value[:rails_app]
+        if value[:rails_app].downcase == "true"
           puts `rm "#{value[:pwd]}"/config/unicorn.rb`
         else
           puts `rm "#{value[:pwd]}"/unicorn.rb`
@@ -29,7 +29,17 @@ class Tuesday
       File.write(kitchen_path, "")
       File.write("/etc/nginx/conf.d/default.conf","")
       puts `service nginx restart`
-    else
+   elsif Dir["*.js"] != []
+	puts "This is a JS app"
+	#Load Menufile
+	
+	puts "Quite a good selection sir"
+	#build /etc/init/app_name.conf
+	#load kitchen
+	puts "Preparing the Kitchen"
+	#rebuild nginx and add new app
+	#restart app_name and nginx 
+   else
       #puts "#praisecatgod"
       settings = {}
 
@@ -214,3 +224,5 @@ file = File.open(kitchen_path)
 
 `cp "#{kitchen_path}" /usr/local/bin/kitchen`
 `chmod a+x /usr/local/bin/kitchen`
+
+
