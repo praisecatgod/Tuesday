@@ -32,13 +32,86 @@ class Tuesday
    elsif Dir["*.js"] != []
 	puts "This is a JS app"
 	#Load Menufile
+	settings = {}
+	begin
+        # Exceptions raised by this code will
+        # be caught by the following rescue clause
+           settings = eval "{#{IO.readlines('Menufile').join.strip}}"
+        rescue
+           puts "You don't have a Menufile. Please consult http://tuesdayrb.me for support.
+        Thank you please come again."
+        abort
+        end
+
+	output = `pwd`
+        app_name = output.split("/").last
+        app_name.strip!
+        puts "I see you would like the #{app_name}. Very fine choice"	
 	
-	puts "Quite a good selection sir"
+	ary = `pwd`.split("/")
+	ary.pop
+	ary = ary.map{|p| "#{p}/"}
+	pwd = ary.join
+	
+	#build /etc/nginx/conf.d/defaults.conf
+	new_nginx = "
+upstream #{app_name} {
+    server 127.0.0.1:3000;
+  }
+
+server{
+listen 80;
+    server_name #{app_name}.#{settings[:domain]};
+    access_log #{pwd}#{app_name}/logs/nginx/minitorials.log;
+
+    location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-NginX-Proxy true;
+
+      proxy_pass http://#{app_name}/;
+      proxy_redirect off;
+    }
+}
+	"	
+	
 	#build /etc/init/app_name.conf
+	daemon = "
+description \"node.js server named: #{app_name}\"
+author      \"Max Rogers - Tuesday.rb\"
+
+# used to be: start on startup
+# until we found some mounts weren't ready yet while booting:
+start on started mountall
+stop on shutdown
+
+# Automatically Respawn:
+respawn
+respawn limit 99 5
+
+script
+    # Not sure why $HOME is needed, but we found that it is:
+    export HOME=\"/root\"
+
+    exec /usr/bin/nodejs #{pwd}#{app_name}/server.js >> /var/log/#{app_name}.log 2>&1
+end script
+
+post-start script
+   # Optionally put a script here that will notifiy you node has (re)started
+   # /root/bin/hoptoad.sh \"node.js has started!\"
+end script
+"
 	#load kitchen
 	puts "Preparing the Kitchen"
 	#rebuild nginx and add new app
+	open("/etc/nginx/conf.d/defaults.conf", "a"){ |f|
+		f.puts "#{new_nginx}"
+	}	
+	File.write("/etc/init/#{app_name}.conf", daemon)
 	#restart app_name and nginx 
+	puts `start "#{app_name}"`
+	puts `service nginx restart`
    else
       #puts "#praisecatgod"
       settings = {}
