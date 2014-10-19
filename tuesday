@@ -6,6 +6,19 @@
 
 #to execute just use `$command` it will return a string variable
 
+settings = {}
+
+begin
+  # Exceptions raised by this code will
+  # be caught by the following rescue clause
+  settings = eval "{#{IO.readlines('Menufile').join.strip}}"
+
+rescue
+  puts "You don't have a Menufile. Please consult http://tuesdayrb.me for support.
+  Thank you please come again."
+  abort
+end
+
 output = `bundle install --without production`
 puts output
 
@@ -49,8 +62,11 @@ puts `mkdir logs pids`
 nginx = `which nginx`
 if nginx == ""
   #install nginx
-  #puts `brew install nginx`
-  puts `apt-get install nginx`
+  if `uname`.strip == "Darwin"
+    puts `brew install nginx`
+  else
+    puts `apt-get install nginx`
+  end
 end
 
 #kill the bad nginx
@@ -60,6 +76,7 @@ puts `rm /etc/nginx/sites-available/*`
 puts `rm /etc/nginx/sites-enabled/*`
 
 puts "Added the good nginx"
+
 nginx_base = "
 
 upstream #{app_name} {
@@ -73,7 +90,7 @@ server {
     listen 80;
 
     # Set the server name, similar to Apache's settings
-    server_name localhost #{app_name}.#{domain_name};
+    server_name localhost #{app_name}.#{settings[:domain]};
 
     # Application root, as defined previously
     root /var/www/#{app_name}/public;
@@ -95,6 +112,13 @@ server {
 
 "
 
-puts `echo #{nginx_base} >> /etc/nginx/config.d/default.conf`
-puts `unicorn -c unicorn.rb -D`
-puts `service nginx restart`
+#puts nginx_base
+#conf_d =  IO.readlines('/etc/nginx/conf.d/default.conf').join
+#puts conf_d
+`rm /etc/nginx/conf.d/default.conf`
+puts nginx_base
+File.write("/etc/nginx/conf.d/default.conf",nginx_base)
+
+#puts `echo #{nginx_base} >> /etc/nginx/conf.d/default.conf `
+#puts `unicorn -c unicorn.rb -D`
+#puts `service nginx restart`
