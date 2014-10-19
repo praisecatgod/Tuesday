@@ -140,6 +140,14 @@ end
 
 #run new unicorns
 
+puts "Making your order"
+
+if kitchen["#{app_name}".to_sym]
+  kitchen.delete("#{app_name}".to_sym)
+end
+
+kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip}
+
 puts "Making the patties"
 kitchen.each do |key,value|
     puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
@@ -147,12 +155,6 @@ kitchen.each do |key,value|
 
     new_nginx += gen_nginx(key,settings[:domain])
 end
-
-if kitchen["#{app_name}".to_sym]
-  kitchen.delete("#{app_name}".to_sym)
-end
-
-kitchen["#{app_name}".to_sym] = {pwd: "#{`pwd`}".strip}
 
 File.write('/usr/local/bin/kitchen', "#{kitchen}")
 #File.write("/etc/nginx/conf.d/default.conf",new_nginx)
