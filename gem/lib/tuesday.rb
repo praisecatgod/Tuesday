@@ -82,6 +82,10 @@ class Tuesday
     kitchen = eval(kitchen_str.strip)
     puts "#{settings}"
     puts "Preparing the food"
+    if kitchen.nil?
+      kitchen = {}
+    end
+
 
     new_nginx = ""
 
