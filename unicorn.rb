@@ -1,18 +1,18 @@
 
-working_directory '/var/www/web'
+      working_directory '/var/www/Tuesday'
 
-pid '/var/www/web/pids/unicorn.pid'
+      pid '/var/www/Tuesday/pids/unicorn.pid'
 
-stderr_path '/var/www/web/logs/unicorn.log'
-stdout_path '/var/www/web/logs/unicorn.log'
+      stderr_path '/var/www/Tuesday/logs/unicorn.log'
+      stdout_path '/var/www/Tuesday/logs/unicorn.log'
 
-listen '/tmp/unicorn.web.sock'
+      listen '/tmp/unicorn.Tuesday.sock'
 
-# Number of processes
-# worker_processes 4
-worker_processes 1
+      # Number of processes
+      # worker_processes 4
+      worker_processes 1
 
-# Time-out
-timeout 30
+      # Time-out
+      timeout 30
 
-
+      
