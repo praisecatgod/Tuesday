@@ -2,7 +2,9 @@
 
 class Tuesday
   def self.run
-    puts "#praisecatgod"
+    puts ARGV[0]
+
+    #puts "#praisecatgod"
     settings = {}
 
     rails_app = false
