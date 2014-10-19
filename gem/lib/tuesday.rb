@@ -77,6 +77,7 @@ class Tuesday
     puts "Stocking up the kitchen"
     kitchen =  eval "#{IO.readlines('/usr/local/bin/kitchen').join.strip}"
     puts "#{kitchen}"
+    puts "#{IO.readlines('/usr/local/bin/kitchen')}"
     if kitchen.nil?
       kitchen = {}
     end
