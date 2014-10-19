@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'tuesday'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2014-10-19'
   s.summary     = "Fast Casual DigitalOcean Deployment"
   s.description = "Deploys Rack apps to DigitalOcean with one command."

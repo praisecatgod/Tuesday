@@ -87,43 +87,6 @@ class Tuesday
     #
     #write new default conf file
 
-    def gen_nginx(app_name, domain_name)
-    "
-
-    upstream #{app_name} {
-        # Path to Unicorn SOCK file, as defined previously
-        server unix:/tmp/unicorn.#{app_name}.sock fail_timeout=0;
-    }
-
-    server {
-
-
-        listen 80;
-
-        # Set the server name, similar to Apache's settings
-        server_name localhost #{app_name}.#{domain_name};
-
-        # Application root, as defined previously
-        root /var/www/#{app_name}/public;
-
-        try_files $uri/index.html $uri @#{app_name};
-
-        location @#{app_name} {
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Host $http_host;
-            proxy_redirect off;
-            proxy_pass http://#{app_name};
-        }
-
-        error_page 500 502 503 504 /500.html;
-        client_max_body_size 4G;
-        keepalive_timeout 10;
-
-    }
-
-    "
-    end
-
     new_nginx = ""
 
     #kill old unicorns
@@ -149,8 +112,43 @@ class Tuesday
     kitchen.each do |key,value|
         puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
         value[:pid] = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
+        app_name = key
+        domain_name = settings[:domain]
+        #new_nginx += gen_nginx(key,settings[:domain])
+        new_nginx += "
 
-        new_nginx += gen_nginx(key,settings[:domain])
+        upstream #{app_name} {
+            # Path to Unicorn SOCK file, as defined previously
+            server unix:/tmp/unicorn.#{app_name}.sock fail_timeout=0;
+        }
+
+        server {
+
+
+            listen 80;
+
+            # Set the server name, similar to Apache's settings
+            server_name localhost #{app_name}.#{domain_name};
+
+            # Application root, as defined previously
+            root /var/www/#{app_name}/public;
+
+            try_files $uri/index.html $uri @#{app_name};
+
+            location @#{app_name} {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+                proxy_pass http://#{app_name};
+            }
+
+            error_page 500 502 503 504 /500.html;
+            client_max_body_size 4G;
+            keepalive_timeout 10;
+
+        }
+
+        "
     end
 
     File.write('/usr/local/bin/kitchen', "#{kitchen}")
