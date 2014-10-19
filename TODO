@@ -20,3 +20,8 @@ DONE	b. Get rid of the bad shit (of Nginx) => delete /etc/nginx/conf.d/defaults 
 	- lrn 2 design lol
 2. Tutorial page
 	- important shit
+
+
+gem build tuesday.gemspec
+gem install ./tuesday-0.0.3.gem [or w/e version]
+[you can't push to gem online, b/c passwords and shittt]
