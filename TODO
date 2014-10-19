@@ -8,12 +8,13 @@ DONE	a. make logs and pids folders
 DONE 3. Make sure Nginx is installed => which nginx
 DONE 	a. Install Nginx => apt get install nginx
 DONE	b. Get rid of the bad shit (of Nginx) => delete /etc/nginx/conf.d/defaults /etc/nginx/sites [sudo rm /path/to/directory/ *]
-	c. Add our shit to Nginx
-4. Update Nginx for new Unicorn
-5. Boot up Unicorns
-6. Restart Nginx
-7. Have a snack and take a nap
-
+DONE	c. Add our shit to Nginx
+DONE 4. Update Nginx for new Unicorn
+DONE 5. Boot up Unicorns
+DONE 6. Restart Nginx
+DONE 7. Have a snack and take a nap
+DONE 8. Add Rails Support
+9. Add NodeJS support
 
 == WEBSITE ==
 1. Landing Page

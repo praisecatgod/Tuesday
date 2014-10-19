@@ -1,0 +1,61 @@
+#adding NodeJS support
+
+Add this to nginx [/etc/nginx/conf.d/default.conf]
+##########################################
+
+upstream app_robstodo {
+    server 127.0.0.1:3000;
+  }
+
+server{
+listen 80;
+    server_name node.maxrogers.me;
+    access_log /var/www/test_node/logs/nginx/minitorials.log;
+
+    location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-NginX-Proxy true;
+
+      proxy_pass http://app_robstodo/;
+      proxy_redirect off;
+    }
+}
+
+
+##########################################
+in /etc/init add a new file node_name.conf
+
+fill it with
+
+##########################################
+
+description "node.js server"
+author      "Max Rogers - Tuesday.rb"
+
+# used to be: start on startup
+# until we found some mounts weren't ready yet while booting:
+start on started mountall
+stop on shutdown
+
+# Automatically Respawn:
+respawn
+respawn limit 99 5
+
+script
+    # Not sure why $HOME is needed, but we found that it is:
+    export HOME="/root"
+
+    exec /usr/bin/nodejs /path/to/node/server.js >> /var/log/node.log 2>&1
+end script
+
+post-start script
+   # Optionally put a script here that will notifiy you node has (re)started
+   # /root/bin/hoptoad.sh "node.js has started!"
+end script
+
+##########################################
+
+then run $ start node_name
+this will create the daemon to stop it run $ stop node_name
