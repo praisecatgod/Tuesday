@@ -6,9 +6,8 @@ Gem::Specification.new do |s|
   s.description = "Deploys Rack apps to DigitalOcean with one command."
   s.authors     = ["Yves DeSousa", "Max Rogers"]
   s.email       = 'yvonne@yvds.net'
-  s.files       = ["lib/tuesday.rb"]
-  s.homepage    =
-    'http://tuesdayrb.me'
-  s.license       = 'WTFPL'
+  s.files       = ["lib/tuesday.rb", "lib/kitchen"]
+  s.homepage    = 'http://tuesdayrb.me'
+  s.license     = 'WTFPL'
   s.executables << 'tuesday'
 end
