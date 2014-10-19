@@ -81,7 +81,7 @@ class Tuesday
 
     puts "#{settings}"
     puts "Preparing the food"
-
+    File.write(kitchen_path,"Stuff")
     #build new temp default.conf file
 
     #kill old default.conf
