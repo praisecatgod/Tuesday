@@ -131,8 +131,9 @@ end
 #kill old unicorns
 puts "Grinding up the unicorns"
 kitchen.each do |key,value|
-    unicorn_id = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
-    puts `kill "#{unicorn_id}"`
+  puts "#{value[:pwd]}"
+  unicorn_id = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
+  puts `kill "#{unicorn_id}"`
 end
 
 #run new unicorns
