@@ -25,3 +25,6 @@ DONE	b. Get rid of the bad shit (of Nginx) => delete /etc/nginx/conf.d/defaults 
 gem build tuesday.gemspec
 gem install ./tuesday-0.0.3.gem [or w/e version]
 [you can't push to gem online, b/c passwords and shittt]
+
+WOOT I FIXED THE GEM VERSION
+The issue was that IO. wouldn't read properly within the gem. Replaced it with the File class
