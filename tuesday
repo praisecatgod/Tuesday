@@ -142,7 +142,7 @@ end
 
 puts "Making the patties"
 kitchen.each do |key,value|
-    puts `unicorn -c "#{value[:pwd]}"unicorn.rb -D`
+    puts `unicorn -c "#{value[:pwd]}"/unicorn.rb -D`
     value[:pid] = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
 
     new_nginx += gen_nginx(key,settings[:domain])
