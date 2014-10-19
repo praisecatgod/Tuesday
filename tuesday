@@ -112,12 +112,40 @@ server {
 
 "
 
-#puts nginx_base
-#conf_d =  IO.readlines('/etc/nginx/conf.d/default.conf').join
-#puts conf_d
-`rm /etc/nginx/conf.d/default.conf`
-puts nginx_base
-File.write("/etc/nginx/conf.d/default.conf",nginx_base)
 
-puts `unicorn -c unicorn.rb -D`
-puts `service nginx restart`
+#add app to kitchen
+kitchen =  eval "#{IO.readlines('/usr/local/bin/kitchen').join.strip}"
+if kitchen.nil?
+  kitchen = {}
+end
+
+
+#build new temp default.conf file
+
+#kill old default.conf
+#puts "Reloading nginx config"
+#puts `rm /etc/nginx/conf.d/default.conf`
+#write new default conf file
+#File.write("/etc/nginx/conf.d/default.conf",nginx_base)
+
+
+
+#kill old unicorns
+puts "Grinding up the unicorns"
+kitchen.each do |key,value|
+    unicorn_id = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
+    puts `kill "#{unicorn_id}"`
+end
+
+#run new unicorns
+
+puts "Making the patties"
+kitchen.each do |key,value|
+    puts `unicorn -c "#{value[:pwd]}"unicorn.rb -D`
+    value[:pid] = IO.readlines("#{value[:pwd]}/pids/unicorn.pid").join.strip
+end
+
+File.write('/usr/local/bin/kitchen', "#{kitchen}")
+
+#restart nginx
+#puts `service nginx restart`
