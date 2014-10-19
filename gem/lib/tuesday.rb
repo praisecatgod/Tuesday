@@ -2,10 +2,9 @@
 
 class Tuesday
   def self.run
-    puts ARGV[0]
+    #puts ARGV[0]
 
-    mode = ARGV[0]
-    mode = "regular" if ARGV[0].nil?
+    ARGV[0] = "regular" if ARGV[0].nil?
 
     if mode.downcase == "reset"
       kitchen_path = File.join( File.dirname(__FILE__), 'kitchen' )
