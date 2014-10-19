@@ -74,7 +74,9 @@ class Tuesday
     puts `rm /etc/nginx/conf.d/default.conf`
 
     #add app to kitchen
+    puts "Stocking up the kitchen"
     kitchen =  eval "#{IO.readlines('/usr/local/bin/kitchen').join.strip}"
+    puts "#{kitchen}"
     if kitchen.nil?
       kitchen = {}
     end
