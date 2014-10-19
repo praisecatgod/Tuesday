@@ -1,5 +1,6 @@
-require 'sinatra'
-require 'haml'
+require 'rubygems'
+require 'bundler'
+Bundler.require(:default)
 
 get '/' do
   haml :home
