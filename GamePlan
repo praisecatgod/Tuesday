@@ -1,0 +1,27 @@
+Tuesday
+#Steps
+#0. Look for Menufile
+#1. Get path/to/files
+#2. Identify what type of project it is
+#3. Check for and install if need be Load Balancer, Databases and Web Servers
+#4. Save settings in Private File
+#5. Setup Daemon
+#6. Append to Load Balancer
+#7. Restart Load Balancer
+
+#What needs to be in the Menufile
+#Domain Name
+#App Name (If you don't want it to be your folder name)
+#Special Database settings that might be different than your own
+#Mode: Production,Development,Test or Other
+#Other Installations like ImageMagick or Memecached
+
+#Features
+# Supports Rails, Sinatra and other Rack based web apps
+# Supports NodeJS based web apps
+# A Git daemon? (Need to research how to setup remote repo)
+# Installation and one command on DigitalOcean or whatever server
+# Then you just need to use git to push to it like Dokku. The difference that
+# 1. you don't need to conform to Dokku (Custom Technology and Custom Settings)
+# 2. the git push it optional
+# 3. The code is available for you to inspect. Completely Transparent
