@@ -235,4 +235,4 @@ end
 `touch  "#{Tuesday.kitchen_path}"`
 `chmod a+x "#{Tuesday.kitchen_path}"`
 
-Tuesday.run
+#Tuesday.run
