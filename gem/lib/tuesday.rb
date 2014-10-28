@@ -173,8 +173,8 @@ server {
     #Readd all the servers to nginx
     str = ""
     @@kitchen.each do |key,value|
-      puts "LOL LOL"
-      str = make_unicorn_for_nginx(value[:app_name],value[:path],value[:domain])
+      str += make_unicorn_for_nginx(value[:app_name],value[:path],value[:domain])
+      str += "\n"
     end
     #str = make_unicorn_for_nginx(@@menu[:app_name],@@menu[:path],@@menu[:domain])
     File.open("/etc/nginx/conf.d/default.conf", 'w') { |file| file.write("#{str}") }
