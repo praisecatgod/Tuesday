@@ -7,8 +7,11 @@ Tuesday is a deployment service that makes deploying Ruby apps to DigitalOcean q
 Tuesday was developed during HackNY Fall 2014, and is in continual development. Bug reports are loved, and use is ultimately at your own risk!
 
 ```$ gem install tuesday```
+
 ```$ cd your_awesome_project``` 
+
 ```$ echo domain: 'your.domain' >> Menufile``` 
+
 ```$ tuesday ```
 
 Additional information and documentation at [tuesday.maxrogers.me](http://tuesday.maxrogers.me/)
