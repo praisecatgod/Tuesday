@@ -4,6 +4,9 @@
 #don't use exec "ls" as it switches the shell to that new unix process from our ruby one.
 #require 'colorize' #This could add some color to the std outputs
 
+#Kitchen is the stashed file in /usr/local/bin that stores all the basic settings like what is the pid and the path
+#Menu is the set of settings for an application. The kitchen is composed of menus
+
 class Tuesday
   #Menu hash
     #domain
@@ -43,16 +46,20 @@ class Tuesday
     puts "Time to build up the databases"
     case @@menu[:database]
     when "mongodb"
-      if `which mongod` != ""
-        puts "You have MongoDB already installed"
-      else
-        puts "You appear to not have Mongodb installed"
-      end
+      puts "You appear to not have Mongodb installed"
+      system "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
+      system 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list'
+      system 'apt-get -y update'
+      system 'apt-get -y install mongodb-10gen'
+      system 'sudo bash ./mongo_install.bash'
+      system 'ps aux | grep mongo'
     when "postgressql", "pg", "psql"
       if `which psql` != ""
        puts "You have Postgressql already installed"
      else
-       puts "You appear to now have Postgressql installed"
+       puts "You appear to not have Postgressql installed"
+       system "sudo apt-get update"
+       system "sudo apt-get install postgresql postgresql-contrib"
      end
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
