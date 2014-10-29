@@ -1,2 +1,5 @@
 
-domain: 'maxrogers.me'
+domain: 'merogers.me',
+app_type: 'sinatra',
+webserver: "unicorn",
+database: "mongodb"

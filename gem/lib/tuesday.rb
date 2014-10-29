@@ -47,12 +47,19 @@ class Tuesday
         puts "You have MongoDB already installed"
       else
         puts "You appear to not have Mongodb installed"
+      	system "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
+      	system 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list'
+      	system 'apt-get -y update'
+      	system 'apt-get -y install mongodb-10gen'
+      	puts "Finished installing Mongodb"
       end
     when "postgressql", "pg", "psql"
       if `which psql` != ""
        puts "You have Postgressql already installed"
      else
-       puts "You appear to now have Postgressql installed"
+       puts "You appear to not have Postgressql installed"
+	system "sudo apt-get update"
+	system "sudo apt-get install postgresql postgresql-contrib"
      end
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
