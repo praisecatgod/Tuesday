@@ -4,6 +4,9 @@
 #don't use exec "ls" as it switches the shell to that new unix process from our ruby one.
 #require 'colorize' #This could add some color to the std outputs
 
+#Kitchen is the stashed file in /usr/local/bin that stores all the basic settings like what is the pid and the path
+#Menu is the set of settings for an application. The kitchen is composed of menus
+
 class Tuesday
   #Menu hash
     #domain
@@ -58,8 +61,8 @@ class Tuesday
        puts "You have Postgressql already installed"
      else
        puts "You appear to not have Postgressql installed"
-	system "sudo apt-get update"
-	system "sudo apt-get install postgresql postgresql-contrib"
+       system "sudo apt-get update"
+       system "sudo apt-get install postgresql postgresql-contrib"
      end
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
