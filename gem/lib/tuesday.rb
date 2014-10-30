@@ -106,7 +106,7 @@ class Tuesday
           #PG::Connection.new
           system "sudo -u postgres createuser #{ pg_server["username"]}"
           system "sudo -u postgres createdb -O #{ pg_server["username"]} #{pg_server["database"]}"
-          pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], pg_server["password"])
+          pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], nil)
           #figure out what development wants
           #make sure the database is seen and accessible
           #by default use development but if menufile says to use production
