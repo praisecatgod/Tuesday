@@ -78,7 +78,7 @@ class Tuesday
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
     end
 
-    if menu[:database]
+    if @@menu[:database]
       if File.directory?("config")
         if File.file?("config/mongo.yml")
           yaml = YAML.load_file("config/mongo.yml")
@@ -132,7 +132,7 @@ class Tuesday
     begin
       # Exceptions raised by this code will
       # be caught by the following rescue clause
-      @@menu = eval("{#{IO.readlines("Menufile").join.strip}}")
+      @@menu = eval("#{IO.readlines("Menufile").join.strip}")
     rescue
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
     end

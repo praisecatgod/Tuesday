@@ -1,0 +1,1 @@
+{:app_type=>"sinatra", :database=>"pg", :orm=>"mongoid", :domain=>"localhost", :path=>"/var/www/Tuesday"}
