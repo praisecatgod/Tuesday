@@ -6,6 +6,9 @@
 
 #Kitchen is the stashed file in /usr/local/bin that stores all the basic settings like what is the pid and the path
 #Menu is the set of settings for an application. The kitchen is composed of menus
+#system "yaml"
+#system "pg"
+#system "mongo"
 
 #To read YAML (.yml) file use the following
 require 'yaml'
@@ -133,6 +136,7 @@ class Tuesday
     rescue
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
     end
+    str = `ls`
     if str.include? "Gemfile"
       File.open("Gemfile").each_line do |line|
         if line.include? "sinatra"
@@ -170,7 +174,7 @@ class Tuesday
     @@menu[:webserver].downcase!
     @@menu[:database].downcase!
     #updating it for future reference
-    File.open("Menufile","w"){|f| f.write("#{menu}")}
+    File.open("Menufile","w"){|f| f.write("#{@@menu}")}
   end
 
   def self.make_unicorn(app_name,path)
