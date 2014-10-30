@@ -1,0 +1,36 @@
+#Tuesday Master Plan
+
+I want tuesday be a serious alternative to dokku/heroku
+
+Rather than forcing my application to configure to dokku/heroku, I want it to figure out what I have been building
+
+Will there be a limitation on this? Probably but if it is more flexible than dokku/heroku than I feel it has been a success
+
+I want to have two line installations
+
+$ git clone/git pull
+$ tuesday
+
+when on deploy server
+
+However, it could be fun to borrow from Dokku and Heroku
+$ git push tuesday
+when on development but that will come later
+
+Will need to research how to setup remote gitrepos and how you can communicate to and from
+haha Call it Takeout
+
+The difference is that my application is here to help you get set up not provide a platform
+
+Ultimately it should allow an user to use any of the supported databases, allow cross application database communication
+easy subdomains and git push deployment
+
+Will Support
+  Apps: Sinatra, Rails, Any Rack?
+  Databases: MongoDB, Postgresql, MySQL, Redis, SQLite
+  Webservers: Puma, Unicorn, Passanger
+  ORMS: ActiveRecord, Mongo-Mapper, Mongoid, Data-mapper
+  Rubys: RubyMRI, JRuby, Rubinus (Not sure if we need to do anything for that....RVM should do that?)
+
+Question is do we default to Production or Development?
+Oh :D if Production is filled with bullshit Heroku/Dokku nonsense we just use the default settings

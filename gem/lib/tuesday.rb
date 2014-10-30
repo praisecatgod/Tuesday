@@ -7,6 +7,12 @@
 #Kitchen is the stashed file in /usr/local/bin that stores all the basic settings like what is the pid and the path
 #Menu is the set of settings for an application. The kitchen is composed of menus
 
+#To read YAML (.yml) file use the following
+require 'yaml'
+require 'pg'
+require 'mongo'
+include Mongo
+
 class Tuesday
   #Menu hash
     #domain
@@ -46,13 +52,12 @@ class Tuesday
     puts "Time to build up the databases"
     case @@menu[:database]
     when "mongodb"
-      puts "You appear to not have Mongodb installed"
+      puts "Installing Mongodb"
       system "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
       system 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list'
       system 'apt-get -y update'
       system 'apt-get -y install mongodb-10gen'
-      system 'sudo bash ./mongo_install.bash'
-      system 'ps aux | grep mongo'
+      puts "Finished installing Mongodb"
     when "postgressql", "pg", "psql"
       if `which psql` != ""
        puts "You have Postgressql already installed"
@@ -60,9 +65,45 @@ class Tuesday
        puts "You appear to not have Postgressql installed"
        system "sudo apt-get update"
        system "sudo apt-get install postgresql postgresql-contrib"
+       system "sudo apt-get install postgresql-client libpq5 libpq-dev"
      end
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
+    end
+
+    if menu[:database]
+      if File.directory?("config")
+        if File.file?("config/mongo.yml")
+          yaml = YAML.load_file("config/mongo.yml")
+          #figure out what development wants
+          #make sure the database is seen and accessible
+          mongo_server = yaml["development"]["sessions"]["default"]["hosts"].first.split(":")
+          db = MongoClient.new(mongo_server[0],mongo_server[1]).db(yaml["development"]["sessions"]["default"]["database"])
+          #by default use development but if menufile says to use production
+        else
+          puts "You don't appear to be using config/mong.yml to set up your database"
+        end
+
+        if File.file?("config/database.yml")
+          yaml = YAML.load_file("config/database.yml")
+          puts yaml
+          #puts yaml["development"]["sessions"]["default"]["hosts"].first.split(":")
+          pg_server = yaml["development"]
+          #pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], pg_server["password"])
+          puts ""
+          PG::Connection.new
+          #figure out what development wants
+          #make sure the database is seen and accessible
+          #by default use development but if menufile says to use production
+          #For ActiveRecord
+          #system 'rake db:migrate'
+          #system 'rake db:seed'
+        else
+          puts "You don't appear to be using config/database.yml to set up your database"
+        end
+      else
+        puts "You don't appear to be using config folder to set up your databases"
+      end
     end
 
     #Time for web servers
@@ -84,16 +125,48 @@ class Tuesday
     begin
       # Exceptions raised by this code will
       # be caught by the following rescue clause
-
       @@menu = eval("{#{IO.readlines("Menufile").join.strip}}")
     rescue
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
+    end
+    if str.include? "Gemfile"
+      File.open("Gemfile").each_line do |line|
+        if line.include? "sinatra"
+          @@menu[:app_type] ||= "sinatra"
+        elsif line.include? "rails"
+          @@menu[:app_type] ||= "rails"
+        elsif line.include? "unicorn"
+          @@menu[:webserver] ||= "unicorn"
+        elsif line.include? "puma"
+          @@menu[:webserver] ||= "puma"
+        elsif line.include? "pg"
+          @@menu[:database] ||= "pg"
+        elsif line.include? "mongoid"
+          @@menu[:database] ||= "mongodb"
+          @@menu[:orm] ||= "mongoid"
+        elsif line.include? "mongo-mapper"
+          @@menu[:database] ||= "mongodb"
+          @@menu[:orm] ||= "mongo-mapper"
+        elsif line.include? "activerecord"
+          @@menu[:orm] ||= "activerecord"
+        elsif line.include? "sinatra-activerecord"
+          @@menu[:orm] ||= "activerecord"
+        elsif line.include? "data-mapper"
+          @@menu[:orm] ||= "data-mapper"
+        else
+          #nothing
+        end
+      end
+    else
+      puts "You don't have a Gemfile installed"
       abort
     end
     @@menu[:path] = `pwd`.strip
     @@menu[:domain].downcase!
     @@menu[:webserver].downcase!
     @@menu[:database].downcase!
+    #updating it for future reference
+    File.open("Menufile","w"){|f| f.write("#{menu}")}
   end
 
   def self.make_unicorn(app_name,path)
@@ -244,3 +317,8 @@ end
 `chmod a+x "#{Tuesday.kitchen_path}"`
 
 #Tuesday.run
+
+
+#If the user doesn't supply a Menufile. Assume this is a single application and don't need subdomain support.
+#Also, add smart Menufile build. If Menufile doesn't have X it should look for it in the Gem/database.yml file.
+#At the end of a nginx/kitchen setup a new Menufile should be pasted into the file

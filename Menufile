@@ -1,2 +1,1 @@
-
-domain: 'maxrogers.me'
+{:app_type=>"sinatra", :database=>"mongodb"}

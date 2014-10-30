@@ -20,3 +20,40 @@
     .col-md-12
       %h4 Goodbye messy configuration.
       %h3 Hello, Tuesday.rb!
+  .row
+    .col-mid-12
+      %h3 How does it work?
+      %p Tuesday uses a simple settings file called Menufile to understand what you want for a webstack. Imagine it like a dinner menu :D. With the Menu, it ensures everything is installed properly and configured correctly so you don't have to :D.
+      However, we are working hard so that this file isn't necessary. We plan for Tuesday to look through your code and figure out what needs to be installed and configured. Currently Tuesday relies upon you explicitally stating what your domain name is(its so it can support subdomains)
+      Hopefully in future iterations this won't be necessary. Obviously we will still want you to build a Menufile. It can only speed up the deployment process.
+  .row
+    .col-mid-12
+      %h3 How do I install it?
+      %p For your easy, Tuesday is packaged in a Ruby gem. So all you have to do is type in
+      .panel-body
+        %code
+          $ gem install ruby
+      %p and Tuesday handles the rest
+  .row
+    .col-mid-12
+      %h3 What does it currently support?
+      %p Tuesday currently supports Sinatra apps with MongoDB databases and Unicorn webservers. However Rails, Postgressql and Puma support are currently in the works and should be pushed in the next gem update.
+      %p Future supported technologies include: Redis, MySQL, Passanger
+  .row
+    .col-mid-12
+      %h3 Awww man....I really wish it supported X
+      %p I know right? That would be so cool. If you can think of a technology that Tuesday should support please email me at max@maxrogers.me . Let me know :D also a tutorial on how it works couldn't hurt. (Want to make sure it works ;)).
+      However, if you feel up to the task, you can help me directly. This project is opensourced and can be found here
+      %a{:href=>"http://github.com/yvds/tuesday"}On Github
+  .row
+    .col-mid-12
+      %h3 5 Second Tutorial
+      %p Okay okay...sounds cool....now lets actually use it.
+      %p To do that ssh into your Digital Ocean droplet and make sure rubygems is installed. I recommend using RVM and ruby 2.1.2
+      Next pick a directory for your application.(the folder shouldn't matter but this appears to be that the /var/www folder is the convention).
+
+      %p Now vim/nano into config.ru and paste in the following
+      %p
+      %p Next make a Gemfile and fill it with the following
+      %p Finally $ gem install tuesday followed up with $ tuesday
+      %p If you type in http://$your_app_name.$your_domain_name.$com?/. It should show your awesome new app deployed for all the internet to see :D.
