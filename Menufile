@@ -1,7 +1,1 @@
-
-
-domain: 'merogers.me',
-app_type: 'sinatra',
-webserver: "unicorn",
-database: "mongodb"
-
+{:app_type=>"sinatra", :database=>"pg", :orm=>"mongoid", :domain=>"localhost", :path=>"/var/www/Tuesday"}

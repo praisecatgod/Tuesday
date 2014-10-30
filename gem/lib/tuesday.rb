@@ -6,6 +6,9 @@
 
 #Kitchen is the stashed file in /usr/local/bin that stores all the basic settings like what is the pid and the path
 #Menu is the set of settings for an application. The kitchen is composed of menus
+#system "yaml"
+#system "pg"
+#system "mongo"
 
 #To read YAML (.yml) file use the following
 require 'yaml'
@@ -80,7 +83,7 @@ class Tuesday
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
     end
 
-    if menu[:database]
+    if @@menu[:database]
       if File.directory?("config")
         if File.file?("config/mongo.yml")
           yaml = YAML.load_file("config/mongo.yml")
@@ -137,7 +140,7 @@ class Tuesday
     begin
       # Exceptions raised by this code will
       # be caught by the following rescue clause
-      @@menu = eval("{#{IO.readlines("Menufile").join.strip}}")
+      @@menu = eval("#{IO.readlines("Menufile").join.strip}")
     rescue
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
     end
