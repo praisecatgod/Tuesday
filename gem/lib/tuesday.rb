@@ -70,6 +70,11 @@ class Tuesday
        system "sudo apt-get update"
        system "sudo apt-get install postgresql postgresql-contrib"
        system "sudo apt-get install postgresql-client libpq5 libpq-dev"
+       system "sudo -u postgres createuser root"
+       #template1 | postgres
+       #PG::Connection.new(nil, 5432, nil, nil, 'template1', nil, nil)
+       #Maybe we can use this to create the users database and their new role/user
+       #sudo -u postgres createdb -O user_name database_name
      end
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
@@ -94,8 +99,11 @@ class Tuesday
           #puts yaml["development"]["sessions"]["default"]["hosts"].first.split(":")
           pg_server = yaml["development"]
           #pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], pg_server["password"])
-          puts ""
-          PG::Connection.new
+          #puts ""
+          #PG::Connection.new
+          #system "sudo -u postgres createuser #{ pg_server["username"]}"
+          #system "sudo -u postgres createdb -O #{ pg_server["username"]} #{pg_server["database"]}"
+          pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], pg_server["password"])
           #figure out what development wants
           #make sure the database is seen and accessible
           #by default use development but if menufile says to use production
