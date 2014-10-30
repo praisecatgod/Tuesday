@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
     'http://tuesdayrb.me'
   s.license       = 'WTFPL'
   s.executables << 'tuesday'
-  
   s.add_runtime_dependency 'mongo'
   s.add_runtime_dependency 'pg'
 end

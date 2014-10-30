@@ -169,10 +169,12 @@ class Tuesday
       puts "You don't have a Gemfile installed"
       abort
     end
+    @@menu[:domain] ||= "localhost"
+    @@menu[:domain] ||= "unicorn"
     @@menu[:path] = `pwd`.strip
-    @@menu[:domain].downcase!
-    @@menu[:webserver].downcase!
-    @@menu[:database].downcase!
+    @@menu[:domain].downcase! if @@menu[:domain]
+    @@menu[:webserver].downcase! if @@menu[:webserver]
+    @@menu[:database].downcase! if @@menu[:database]
     #updating it for future reference
     File.open("Menufile","w"){|f| f.write("#{@@menu}")}
   end
