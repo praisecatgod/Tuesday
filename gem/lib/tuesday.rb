@@ -133,6 +133,7 @@ class Tuesday
     rescue
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
     end
+    str = `ls`
     if str.include? "Gemfile"
       File.open("Gemfile").each_line do |line|
         if line.include? "sinatra"
@@ -165,12 +166,14 @@ class Tuesday
       puts "You don't have a Gemfile installed"
       abort
     end
+    @@menu[:domain] ||= "localhost"
+    @@menu[:domain] ||= "unicorn"
     @@menu[:path] = `pwd`.strip
-    @@menu[:domain].downcase!
-    @@menu[:webserver].downcase!
-    @@menu[:database].downcase!
+    @@menu[:domain].downcase! if @@menu[:domain]
+    @@menu[:webserver].downcase! if @@menu[:webserver]
+    @@menu[:database].downcase! if @@menu[:database]
     #updating it for future reference
-    File.open("Menufile","w"){|f| f.write("#{menu}")}
+    File.open("Menufile","w"){|f| f.write("#{@@menu}")}
   end
 
   def self.make_unicorn(app_name,path)
