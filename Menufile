@@ -1,1 +1,7 @@
-{:app_type=>"sinatra", :database=>"mongodb"}
+
+
+domain: 'merogers.me',
+app_type: 'sinatra',
+webserver: "unicorn",
+database: "mongodb"
+

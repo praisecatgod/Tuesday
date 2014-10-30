@@ -52,12 +52,16 @@ class Tuesday
     puts "Time to build up the databases"
     case @@menu[:database]
     when "mongodb"
-      puts "Installing Mongodb"
-      system "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
-      system 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list'
-      system 'apt-get -y update'
-      system 'apt-get -y install mongodb-10gen'
-      puts "Finished installing Mongodb"
+      if `which mongod` != ""
+        puts "You have MongoDB already installed"
+      else
+        puts "You appear to not have Mongodb installed"
+      	system "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
+      	system 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list'
+      	system 'apt-get -y update'
+      	system 'apt-get -y install mongodb-10gen'
+      	puts "Finished installing Mongodb"
+      end
     when "postgressql", "pg", "psql"
       if `which psql` != ""
        puts "You have Postgressql already installed"
