@@ -31,6 +31,8 @@ class Tuesday
   def self.installs
     puts "#{"#"*5}Installation#{"#"*5}"
 
+    puts "Got to make sure you have javascript"
+    system "sudo apt-get install nodejs"
     #If already installed than bundle/rvm should be working
     #maybe check for a Gemfile
     system "bundle install"
