@@ -12,9 +12,6 @@
 
 #To read YAML (.yml) file use the following
 require 'yaml'
-require 'pg'
-require 'mongo'
-include Mongo
 
 class Tuesday
   #Menu hash
@@ -65,6 +62,8 @@ class Tuesday
       	system 'apt-get -y install mongodb-10gen'
       	puts "Finished installing Mongodb"
       end
+      require 'mongo'
+      include Mongo
     when "postgressql", "pg", "psql"
       if `which psql` != ""
        puts "You have Postgressql already installed"
@@ -87,6 +86,7 @@ class Tuesday
        #Maybe we can use this to create the users database and their new role/user
        #sudo -u postgres createdb -O user_name database_name
      end
+     require 'pg'
     else
       puts "I don't recognize that database. You will have to install it yourself and make sure your pathing is correct"
     end
