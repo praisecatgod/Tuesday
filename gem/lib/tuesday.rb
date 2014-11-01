@@ -134,6 +134,7 @@ class Tuesday
     #Time for web servers
     puts "Now to do Web Servers"
     @@menu[:webserver].downcase! unless @@menu[:webserver].nil? #make sure its not nil first
+    @@menu[:webserver] ||= "unicorn"
     if @@menu[:webserver] == "puma" || @@menu[:webserver] == "unicorn" || @@menu[:webserver] == "thin" || @@menu[:webserver] == "passanger"
       if `gem list "#{@@menu[:webserver]}"`.include? "("
         puts "#{@@menu[:webserver]} is already installed"
