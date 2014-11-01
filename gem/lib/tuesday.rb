@@ -257,12 +257,20 @@ server {
     @@menu[:app_name] = app_name
     case @@menu[:webserver]
     when "unicorn"
-      File.open("#{@@menu[:path]}/unicorn.rb", 'w') { |file| file.write("#{make_unicorn app_name, @@menu[:path]}") }
+      if @@menu[:app_type] == "rails"
+        File.open("#{@@menu[:path]}/config/unicorn.rb", 'w') { |file| file.write("#{make_unicorn app_name, @@menu[:path]}") }
+      else
+        File.open("#{@@menu[:path]}/unicorn.rb", 'w') { |file| file.write("#{make_unicorn app_name, @@menu[:path]}") }
+      end
       system "mkdir #{@@menu[:path]}/pids"
       system "chown nobody:nogroup -R #{@@menu[:path]}/pids"
       system "mkdir #{@@menu[:path]}/logs"
       system "chown nobody:nogroup -R #{@@menu[:path]}/logs"
-      system "unicorn -c #{@@menu[:path]}/unicorn.rb -D"
+      if @@menu[:app_type] == "rails"
+        system "unicorn_rails -c #{@@menu[:path]}/config/unicorn.rb -D"
+      else
+        system "unicorn -c #{@@menu[:path]}/unicorn.rb -D"
+      end
       #now store the newly created pid
       str = ""
       File.open("#{@@menu[:path]}/pids/unicorn.pid", "r").each_line do |line|
