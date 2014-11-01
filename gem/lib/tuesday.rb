@@ -189,7 +189,7 @@ class Tuesday
       abort
     end
     @@menu[:domain] ||= "localhost"
-    @@menu[:domain] ||= "unicorn"
+    @@menu[:webserver] ||= "unicorn"
     @@menu[:path] = `pwd`.strip
     @@menu[:domain].downcase! if @@menu[:domain]
     @@menu[:webserver].downcase! if @@menu[:webserver]
