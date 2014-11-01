@@ -73,9 +73,17 @@ class Tuesday
        system "sudo apt-get update"
        system "sudo apt-get install postgresql postgresql-contrib"
        system "sudo apt-get install postgresql-client libpq5 libpq-dev"
-       system "sudo -u postgres createuser root"
+       system "sudo -u postgres createuser root -d -s -w"
+       system "psql -c \"ALTER USER root WITH PASSWORD 'root'\" -d template1"
+       #sudo -u postgres createuser root -d -s -w
        #template1 | postgres
        #PG::Connection.new(nil, 5432, nil, nil, 'template1', nil, nil)
+       #Modify nano pg_hba.conf
+       # IPv4 local connections:
+       # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+       #host    all         all         127.0.0.1/5432         trust
+       #psql -c "ALTER USER root WITH PASSWORD 'root'" -d template1
+       #pg = PG::Connection.new('localhost', 5432, nil, nil, 'template1', 'root', 'root')
        #Maybe we can use this to create the users database and their new role/user
        #sudo -u postgres createdb -O user_name database_name
      end
@@ -106,7 +114,8 @@ class Tuesday
           #PG::Connection.new
           system "sudo -u postgres createuser #{ pg_server["username"]}"
           system "sudo -u postgres createdb -O #{ pg_server["username"]} #{pg_server["database"]}"
-          pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], nil)
+          system "psql -c \"ALTER USER #{ pg_server["username"]} WITH PASSWORD '#{ pg_server["password"]}'\" -d template1"
+          pg = PG::Connection.new(pg_server["host"], 5432, nil, nil, pg_server["database"], pg_server["username"], pg_server["password"])
           #figure out what development wants
           #make sure the database is seen and accessible
           #by default use development but if menufile says to use production
