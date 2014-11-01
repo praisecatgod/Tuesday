@@ -156,6 +156,7 @@ class Tuesday
       puts "It appears you are missing or have a corrupt Menufile. Please consult http://tuesdayrb.me for support"
     end
     str = `ls`
+    @@menu ||= {}
     if str.include? "Gemfile"
       File.open("Gemfile").each_line do |line|
         if line.include? "sinatra"
